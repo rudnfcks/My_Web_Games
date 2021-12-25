@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const app = express();
 const http = require("http").createServer(app);
-const port = 5000;
+const port = 8090;
 
 app.use(express.json());
 const cors = require("cors");
@@ -16,7 +16,7 @@ http.listen(port, () => {
 // Static Setting
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use(
-  "/tic_tac_toe",
+  "/tic_tac_toe/",
   express.static(path.join(__dirname, "web_tic_tac_toe/build"))
 );
 
@@ -26,7 +26,7 @@ app.get("/", function (request, response) {
 });
 
 // Tic Tac Toe Game
-app.get("/tic_tac_toe", function (request, response) {
+app.get("/tic_tac_toe/", function (request, response) {
   response.sendFile(path.join(__dirname, "/web_tic_tac_toe/build/index.html"));
 });
 app.get("/tic_tac_toe/*", function (request, response) {
