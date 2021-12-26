@@ -6,12 +6,13 @@ import style from "./App.module.css";
 import "./reset.css";
 
 // Const variable Setting
-//const socket = io.connect("http://zzanhi.iptime.org");
-const socket = io.connect("localhost:8081");
+const socket = io.connect("http://zzanhi.iptime.org");
+//const socket = io.connect("localhost:8081");
 
 function App() {
   // State Setting
   const [mountPopup, setMountPopup] = useState(false);
+  const [myIndex, setMyIndex] = useState(null);
 
   // Mount Function
   useEffect(() => {
@@ -21,9 +22,24 @@ function App() {
     }, 1000);
   }, []);
 
+  // Socket Function
+  useEffect(() => {
+    socket.on("join", (memberCNT) => {
+      if (memberCNT >= 2) {
+        alert("이미 게임이 시작되었거나 방이 가득찼습니다.");
+        document.location.href = "/";
+      }
+      console.log(`MyIndex : ${memberCNT}`);
+      setMyIndex(memberCNT);
+    });
+
+    socket.on("exit", () => {
+      document.location.reload();
+    });
+  }, []);
+
   function onBtnClickHandler(event) {
-    console.log(event.currentTarget.value);
-    socket.emit("test");
+    socket.emit("select", { index: myIndex, value: event.currentTarget.value });
   }
 
   return (
@@ -47,6 +63,13 @@ function App() {
           <button value={9} onClick={onBtnClickHandler}></button>
         </div>
       </div>
+
+      {mountPopup && (
+        <div className={style.popup}>
+          <h1>You</h1>
+          <h1>{myIndex ? "O" : "X"}</h1>
+        </div>
+      )}
     </div>
   );
 }

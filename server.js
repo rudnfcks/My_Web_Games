@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const app = express();
 const http = require("http").createServer(app);
-const port = 8090;
+const port = 8080;
 
 app.use(express.json());
 const cors = require("cors");
