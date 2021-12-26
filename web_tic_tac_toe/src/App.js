@@ -6,7 +6,7 @@ import style from "./App.module.css";
 import "./reset.css";
 
 // Const variable Setting
-const socket = io.connect("http://zzanhi.iptime.org");
+const socket = io.connect("http://113.199.116.33/");
 //const socket = io.connect("localhost:8081");
 
 function App() {
