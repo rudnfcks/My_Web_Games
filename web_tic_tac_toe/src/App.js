@@ -6,20 +6,32 @@ import style from "./App.module.css";
 import "./reset.css";
 
 // Const variable Setting
-const socket = io.connect("http://113.199.116.33:81/");
-//const socket = io.connect("localhost:8081");
+//const socket = io.connect("http://113.199.116.33:81/");
+const socket = io.connect("localhost:8081");
 
 function App() {
   // State Setting
   const [mountPopup, setMountPopup] = useState(false);
+  const [gameWinPopup, setGameWinPopup] = useState(null);
   const [myIndex, setMyIndex] = useState(null);
+  const [gameInfo, setGameInfo] = useState([
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  ]);
 
   // Mount Function
   useEffect(() => {
     setMountPopup(true);
     setTimeout(() => {
       setMountPopup(false);
-    }, 1000);
+    }, 1400);
   }, []);
 
   // Socket Function
@@ -33,9 +45,19 @@ function App() {
       console.log(`MyIndex : ${memberCNT}`);
       setMyIndex(memberCNT);
     });
+
     // Socket Exit Event
     socket.on("exit", () => {
       document.location.reload();
+    });
+
+    // Socket GameWin Event
+    socket.on("gameWin", (value) => {
+      setGameWinPopup(value);
+    });
+
+    socket.on("select", (value) => {
+      setGameInfo(value);
     });
   }, []);
 
@@ -53,15 +75,15 @@ function App() {
         <span></span>
 
         <div className={style.buttons}>
-          <button value={1} onClick={onBtnClickHandler}></button>
-          <button value={2} onClick={onBtnClickHandler}></button>
-          <button value={3} onClick={onBtnClickHandler}></button>
-          <button value={4} onClick={onBtnClickHandler}></button>
-          <button value={5} onClick={onBtnClickHandler}></button>
-          <button value={6} onClick={onBtnClickHandler}></button>
-          <button value={7} onClick={onBtnClickHandler}></button>
-          <button value={8} onClick={onBtnClickHandler}></button>
-          <button value={9} onClick={onBtnClickHandler}></button>
+          {gameInfo.map((item, key) => (
+            <button
+              className={item === 0 ? style.x : style.o}
+              value={key + 1}
+              onClick={onBtnClickHandler}
+            >
+              {item === null ? "" : item === 0 ? "X" : "O"}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -69,6 +91,25 @@ function App() {
         <div className={style.popup}>
           <h1>You</h1>
           <h1>{myIndex ? "O" : "X"}</h1>
+        </div>
+      )}
+
+      {gameWinPopup !== null && (
+        <div className={style.popup}>
+          <h2
+            className={
+              gameWinPopup === 2 ? style.draw : gameWinPopup ? style.o : style.x
+            }
+          >
+            {gameWinPopup === 2 ? "O X" : gameWinPopup ? "O" : "X"}
+          </h2>
+          <h2
+            className={
+              gameWinPopup === 2 ? style.draw : gameWinPopup ? style.o : style.x
+            }
+          >
+            {gameWinPopup === 2 ? "Draw" : "Win"}
+          </h2>
         </div>
       )}
     </div>
