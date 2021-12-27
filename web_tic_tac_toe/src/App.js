@@ -6,8 +6,8 @@ import style from "./App.module.css";
 import "./reset.css";
 
 // Const variable Setting
-//const socket = io.connect("http://113.199.116.33:81/");
-const socket = io.connect("localhost:8081");
+const socket = io.connect("http://113.199.116.33:81/");
+//const socket = io.connect("localhost:8081");
 
 function App() {
   // State Setting
