@@ -6,7 +6,7 @@ import style from "./App.module.css";
 import "./reset.css";
 
 // Const variable Setting
-const socket = io.connect("http://113.199.116.33/");
+const socket = io.connect("http://113.199.116.33:81/");
 //const socket = io.connect("localhost:8081");
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
 
   // Socket Function
   useEffect(() => {
+    // Socket Join Event
     socket.on("join", (memberCNT) => {
       if (memberCNT >= 2) {
         alert("이미 게임이 시작되었거나 방이 가득찼습니다.");
@@ -32,7 +33,7 @@ function App() {
       console.log(`MyIndex : ${memberCNT}`);
       setMyIndex(memberCNT);
     });
-
+    // Socket Exit Event
     socket.on("exit", () => {
       document.location.reload();
     });
