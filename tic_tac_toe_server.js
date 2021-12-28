@@ -72,6 +72,9 @@ io.on("connection", (socket) => {
   console.log(
     `[ Socket ID : ${socket.id} ] is Join to server : member ${memberCNT}/2`
   );
+  if (memberCNT === 2) {
+    io.emit("gameStart");
+  }
 
   socket.on("select", ({ index, value }) => {
     if (turn === index) {

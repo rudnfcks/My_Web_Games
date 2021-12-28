@@ -14,6 +14,7 @@ function App() {
   const [mountPopup, setMountPopup] = useState(false);
   const [gameWinPopup, setGameWinPopup] = useState(null);
   const [myIndex, setMyIndex] = useState(null);
+  const [gameStart, setGameStart] = useState(false);
   const [gameInfo, setGameInfo] = useState([
     null,
     null,
@@ -56,8 +57,14 @@ function App() {
       setGameWinPopup(value);
     });
 
+    // Socket Select Event
     socket.on("select", (value) => {
       setGameInfo(value);
+    });
+
+    // Socket GameStart Event
+    socket.on("gameStart", () => {
+      setGameStart(true);
     });
   }, []);
 
@@ -85,6 +92,7 @@ function App() {
             </button>
           ))}
         </div>
+        {gameStart && <h1 className={style.gameStart}>Game Start</h1>}
       </div>
 
       {mountPopup && (
